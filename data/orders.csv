@@ -1,0 +1,5 @@
+order_id,customer,cpf,item,unit_price,quantity
+1001,Ana,529.982.247-25,Keyboard,120.00,1
+1001,Ana,529.982.247-25,Mouse,80.00,1
+1002,Bruno,111.111.111-11,Monitor,950.00,1
+1003,Carla,123.456.789-00,Cable,25.00,2
