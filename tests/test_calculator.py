@@ -5,7 +5,7 @@ from store.models import Item, Order
 
 
 def make_order(price: float) -> Order:
-    return Order("1", "Test", "529.982.247-25", [Item("Thing", price, 1)])
+    return Order("1", "Test", [Item("Thing", price, 1)])
 
 
 class CalculatorTest(unittest.TestCase):

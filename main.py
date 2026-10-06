@@ -1,34 +1,41 @@
+import os
+import platform
+from datetime import datetime, timezone
+
 import roberty_code as roberty
 
-from store.loader import load_orders, parse_rows
-from store.models import Order
+from store.loader import load_orders
 from store.report import build_report, summarize
 
-DEFAULT_CSV_PATH = "data/orders.csv"
+CSV_PATH = "data/orders.csv"
 
 
-def read_orders(robot) -> list[Order]:
-    rows = robot.input("orders")
-    if rows:
-        print(f"Loaded {len(rows)} rows from the 'orders' input")
-        return parse_rows(rows)
-    csv_path = robot.input("csvPath", DEFAULT_CSV_PATH)
-    print(f"No 'orders' input, reading {csv_path}")
-    return load_orders(csv_path)
+def print_roberty_context(robot) -> None:
+    print("=== Roberty context ===")
+    print(f"Running on Roberty: {robot.is_roberty}")
+    print(f"Environment: {robot.environment}")
+    print(f"Trigger: {robot.trigger}")
+    for key, name in robot.ENV_VARS.items():
+        print(f"  {key} ({name}): {os.environ.get(name)}")
+
+
+def print_runtime_info() -> None:
+    print("=== Runtime ===")
+    print(f"Python: {platform.python_version()} on {platform.system()} {platform.release()}")
+    print(f"Working directory: {os.getcwd()}")
+    print(f"Started at: {datetime.now(timezone.utc).isoformat()}")
 
 
 def main(robot) -> dict:
-    print(f"Running on Roberty: {robot.is_roberty}")
-    print(f"Environment: {robot.environment} | Trigger: {robot.trigger}")
-    print(f"Inputs received: {robot.inputs()}")
+    print_roberty_context(robot)
+    print_runtime_info()
 
-    orders = read_orders(robot)
+    print(f"=== Orders from {CSV_PATH} ===")
+    orders = load_orders(CSV_PATH)
     print(build_report(orders))
 
     summary = summarize(orders)
-    if summary["invalidCpfOrders"] and robot.input("failOnInvalidCpf", False):
-        raise ValueError(f"Orders with invalid CPF: {summary['invalidCpfOrders']}")
-
+    print(f"Grand total: R$ {summary['grandTotal']:.2f}")
     print("Writing summary as the execution result")
     return summary
 

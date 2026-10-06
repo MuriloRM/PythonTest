@@ -9,29 +9,15 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Outside Roberty, `inputs()` returns `None`, so it reads `data/orders.csv` and prints the result instead of writing it.
+## What it prints
 
-## Roberty SDK features shown
+1. **Roberty context**: `is_roberty`, `environment`, `trigger` and every `roberty-*` env var from `ENV_VARS`.
+2. **Runtime**: Python version, OS, working directory and start time.
+3. **Orders**: a report built from `data/orders.csv` (subtotal, shipping, total).
 
-| File | Feature |
-| --- | --- |
-| `main.py` | `roberty.run(main)`: runs the handler, writes the returned summary as the result, exits 0/1 |
-| `main.py` | `is_roberty`, `environment`, `trigger`: printed at startup |
-| `main.py` | `inputs()`: prints every argument received |
-| `main.py` | `input("orders")`, `input("csvPath", default)`, `input("failOnInvalidCpf", False)` |
-| `on_error.py` | `exception()` + `output()`: exception handler declared in `roberty.json` |
+`roberty.run(main)` writes the returned summary as the execution result and exits 0/1. Outside Roberty it prints the summary instead.
 
-Sample webhook body:
-
-```json
-{
-  "orders": [
-    { "order_id": 1, "customer": "Dana", "cpf": "529.982.247-25", "item": "Desk", "unit_price": 300, "quantity": 1 }
-  ]
-}
-```
-
-Send `{ "failOnInvalidCpf": true }` to make the robot fail and trigger `on_error.py`.
+On failure, `on_error.py` (the `exceptionHandler` in `roberty.json`) prints `roberty.exception()` details and writes an error result.
 
 ## Test
 
@@ -43,9 +29,8 @@ python -m unittest discover tests
 
 The project has intentional flaws so each prompt below shows a different capability:
 
-1. **Explain** — "Explain how an order total is calculated in this project."
-2. **Debug** — "The tests are failing. Find and fix the bug." (the free-shipping threshold is wrong)
-3. **Fix validation** — "CPF 111.111.111-11 is accepted as valid. Fix it and add a test."
-4. **New feature** — "Add a `discountCode` input that applies 10% off when it equals `ROBERTY10`."
-5. **Refactor** — "Move the hardcoded tax and shipping values in calculator.py into a config module."
-6. **Write tests** — "Add tests for the CSV loader in store/loader.py."
+1. **Explain**: "Explain how an order total is calculated in this project."
+2. **Debug**: "The tests are failing. Find and fix the bug." (the free-shipping threshold is wrong)
+3. **New feature**: "Add a 10% discount for orders with more than 3 items."
+4. **Refactor**: "Move the hardcoded tax and shipping values in calculator.py into a config module."
+5. **Write tests**: "Add tests for the CSV loader in store/loader.py."
