@@ -1,4 +1,4 @@
 {
-  "entrypoint": "python main.py",
-  "exceptionHandler": "python on_error.py"
+  "entrypoint": "main.py",
+  "exceptionHandler": "on_error.py"
 }
