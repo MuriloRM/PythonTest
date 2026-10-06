@@ -1,5 +1,7 @@
 order_id,customer,item,unit_price,quantity
-1001,Ana,Keyboard,120.00,1
-1001,Ana,Mouse,80.00,1
-1002,Bruno,Monitor,950.00,1
-1003,Carla,Cable,25.00,2
+2001,Diego,Laptop,4200.00,1
+2001,Diego,Backpack,180.00,1
+2002,Elisa,Headphones,350.00,2
+2003,Fabio,Notebook,12.50,4
+2003,Fabio,Pen,3.90,10
+2004,Gabi,Webcam,220.00,1

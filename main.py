@@ -8,6 +8,7 @@ from store.loader import load_orders
 from store.report import build_report, summarize
 
 CSV_PATH = "data/orders.csv"
+BUILD_LABEL = "testing"
 
 
 def print_roberty_context(robot) -> None:
@@ -27,6 +28,7 @@ def print_runtime_info() -> None:
 
 
 def main(robot) -> dict:
+    print(f"### Build: {BUILD_LABEL} ###")
     print_roberty_context(robot)
     print_runtime_info()
 
@@ -36,6 +38,9 @@ def main(robot) -> dict:
 
     summary = summarize(orders)
     print(f"Grand total: R$ {summary['grandTotal']:.2f}")
+    biggest = max(summary["orders"], key=lambda order: order["total"])
+    print(f"Biggest order: #{biggest['orderId']} by {biggest['customer']} (R$ {biggest['total']:.2f})")
+    print(f"Items sold: {sum(item.quantity for order in orders for item in order.items)}")
     print("Writing summary as the execution result")
     return summary
 
